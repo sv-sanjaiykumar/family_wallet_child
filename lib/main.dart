@@ -9,7 +9,7 @@ void main() {
   // Lock to portrait mode for a mobile-first experience
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitDown,       
   ]);
 
   // Make status bar transparent so gradient header bleeds through
