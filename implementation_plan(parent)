@@ -1,0 +1,140 @@
+# Parent Dashboard Module – Implementation Plan
+
+The Family Vault app already has a fully functional **Child Module**. This plan adds the complete **Parent Module** — a clean, professional fintech-style control centre — built alongside the existing code without touching any child files. A role-selection landing screen will let users switch between Parent and Child views.
+
+---
+
+## Proposed Changes
+
+### 1. Models
+
+#### [NEW] `parent_data.dart` → `lib/models/parent_data.dart`
+- `ParentProfile` — name, avatar, list of [ChildProfile](file:///d:/FlutterApps/family_wallet/lib/models/child_data.dart#9-38) refs, total money sent
+- `AppNotification` — id, title, body, time, type (spent/chore/limit)
+- `SpendingLimit` — dailyLimit, dailyUsed, weeklyLimit, weeklyUsed (computed `isExceeded`)
+- `ParentData` — static mock data + helper methods:
+  - `addMoney(double)` → increases child balance, logs transaction
+  - `approveChore(String choreId)` → sets chore to approved, pays child
+  - `rejectChore(String choreId)` → resets chore to pending
+  - `setDailyLimit(double)` / `setWeeklyLimit(double)`
+  - `createChore(...)` → adds new chore to shared `ChildData.chores`
+
+---
+
+### 2. Theme Extension
+
+#### [MODIFY] [app_theme.dart](file:///d:/FlutterApps/family_wallet/lib/theme/app_theme.dart) → [lib/theme/app_theme.dart](file:///d:/FlutterApps/family_wallet/lib/theme/app_theme.dart)
+Add parent-specific palette (clean blue fintech style):
+- `parentPrimary` = `Color(0xFF1A73E8)` (Google-blue)
+- `parentDark` = `Color(0xFF0D47A1)`
+- `parentSurface` = `Color(0xFFF0F4FF)` (light blue-grey bg)
+- `parentGradient` = blue → indigo linear gradient
+- `parentCardGradient` = steel blue → cobalt
+
+---
+
+### 3. Screens – Parent Module
+
+#### [NEW] `parent_home_shell.dart` → `lib/screens/parent/parent_home_shell.dart`
+Bottom nav shell with 5 tabs and fade transition (mirrors child shell pattern):
+- **Home** (dashboard), **Children** (profiles), **Money** (add/transfer), **Chores**, **Activity** (transactions)
+
+#### [NEW] `parent_dashboard_screen.dart` → `lib/screens/parent/parent_dashboard_screen.dart`
+- Gradient header with parent greeting + avatar
+- 3 summary cards: Total Sent, Child Wallet, Monthly Spend
+- Spending bar chart (7-day activity using `CustomPaint`)
+- Category pie breakdown (Chores, Food, Books, Other) using `CustomPaint`
+- Recent transactions preview (last 3 items)
+- Quick actions row: Add Money, Set Limit, View Chores
+
+#### [NEW] `add_money_screen.dart` → `lib/screens/parent/add_money_screen.dart`
+- Child selector pill (if multiple children)
+- Current child wallet balance display
+- Text input for custom amount with ₹ prefix
+- Quick amount chips: ₹100, ₹500, ₹1000, ₹2000
+- Animated confirm button → shows success bottom sheet with updated balance
+
+#### [NEW] `spending_limits_screen.dart` → `lib/screens/parent/spending_limits_screen.dart`
+- Daily limit card: current limit, slider to set, animated progress bar (used/total)
+- Weekly limit card: same pattern
+- Alert badge if limit is exceeded (> 90% used)
+- Save button applies limits to `ParentData`
+
+#### [NEW] `parent_chores_screen.dart` → `lib/screens/parent/parent_chores_screen.dart`
+- Tab bar: **Pending Approval** | **All Chores** | **Create New**
+- Pending tab: chores with `ChoreStatus.completed` → approve/reject buttons
+- All tab: full chore list with status badge
+- Create tab: form with task name, description, reward amount, icon picker
+- Approve action calls `ParentData.approveChore()` → updates balance + logs transaction
+
+#### [NEW] `parent_transactions_screen.dart` → `lib/screens/parent/parent_transactions_screen.dart`
+- Filter chips: All, Credit, Debit, This Week, This Month
+- Grouped by date (Today, Yesterday, Earlier)
+- Each tile: icon, label, amount with colour coding, timestamp
+- Matches & reuses `ChildData.transactions` list
+
+#### [NEW] `child_profile_screen.dart` → `lib/screens/parent/child_profile_screen.dart`
+- Child avatar + name + balance in hero card
+- Stats row: Level, XP, Streak, Badges
+- Add child FAB (modal form: name, emoji picker)
+- Child switcher if multiple children
+
+#### [NEW] `notifications_screen.dart` → `lib/screens/parent/notifications_screen.dart`
+- From `ParentData.notifications` list
+- Icon + colour coded by type (💸 spent, ✅ chore, ⚠️ limit)
+- Swipe-to-dismiss
+
+---
+
+### 4. Reusable Widgets – Parent
+
+#### [NEW] `summary_card.dart` → `lib/widgets/parent/summary_card.dart`
+Gradient card: icon, label, value, optional `delta` badge (e.g. +₹500 today)
+
+#### [NEW] `spending_chart.dart` → `lib/widgets/parent/spending_chart.dart`
+7-bar chart using `CustomPainter` — no external chart dependency needed
+
+#### [NEW] `parent_chore_card.dart` → `lib/widgets/parent/parent_chore_card.dart`
+Chore card with colour-coded status and optional approve/reject action buttons
+
+#### [NEW] `notification_tile.dart` → `lib/widgets/parent/notification_tile.dart`
+Alert tile with leading icon + timestamp
+
+#### [NEW] `limit_progress_bar.dart` → `lib/widgets/parent/limit_progress_bar.dart`
+Animated progress bar with colour shift (green → amber → red)
+
+---
+
+### 5. Navigation / Entry Point
+
+#### [NEW] `role_selection_screen.dart` → `lib/screens/role_selection_screen.dart`
+Beautiful landing screen with two large cards: **Parent** and **Child**. Tapping navigates to the respective shell. This replaces [ChildHomeShell](file:///d:/FlutterApps/family_wallet/lib/screens/child/child_home_shell.dart#9-15) as the app home.
+
+#### [MODIFY] [main.dart](file:///d:/FlutterApps/family_wallet/lib/main.dart) → [lib/main.dart](file:///d:/FlutterApps/family_wallet/lib/main.dart)
+Change `home:` from [ChildHomeShell()](file:///d:/FlutterApps/family_wallet/lib/screens/child/child_home_shell.dart#9-15) to `RoleSelectionScreen()`.
+
+---
+
+## Verification Plan
+
+### Flutter Analysis
+```
+cd d:\FlutterApps\family_wallet
+flutter analyze
+```
+Expected: `No issues found!`
+
+### Manual UI Walkthrough (Hot Reload)
+Run the app with:
+```
+flutter run
+```
+Then verify each screen:
+1. **Role Selection** — Tap "Parent 👨" → lands on Parent Dashboard
+2. **Dashboard** — Summary cards show values, chart renders, recent txns visible
+3. **Add Money** — Enter ₹500, confirm → child balance increases, transaction appears
+4. **Spending Limits** — Drag sliders, save → progress bars update
+5. **Chores** — Create a new chore → appears in All Chores; complete a chore in child view → approve in parent view → balance updates
+6. **Transactions** — Filter chips work, list grouped correctly
+7. **Child Profile** — Child stats render, add child form opens
+8. **Back to Child** — Navigate back to role selection → tap "Child 🧒" → child shell loads normally
