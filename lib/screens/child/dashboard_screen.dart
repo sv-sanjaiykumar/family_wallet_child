@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../theme/app_theme.dart';
 import '../../models/child_data.dart';
 import '../../widgets/balance_card.dart';
+import '../role_selection_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -159,21 +161,51 @@ class _DashboardScreenState extends State<DashboardScreen>
               ),
             ],
           ),
-          // Avatar
-          Container(
-            width: 54,
-            height: 54,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.20),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
-            ),
-            child: Center(
-              child: Text(
-                profile.avatarEmoji,
-                style: const TextStyle(fontSize: 26),
+          // Right side: logout + avatar
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // Logout button
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (_) => const RoleSelectionScreen()),
+                    (_) => false,
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.20),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.logout_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 8),
+              // Avatar
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.20),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: Center(
+                  child: Text(
+                    profile.avatarEmoji,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -14,7 +14,7 @@ class ChildProfile {
   final int xp;
   final int xpToNextLevel;
   final int streakDays;
-  final double spendingLimit;
+  double spendingLimit;
   double spent;
   final List<String> badges;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'theme/app_theme.dart';
-import 'screens/child/child_home_shell.dart';
+import 'screens/role_selection_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ class FamilyVaultApp extends StatelessWidget {
       title: 'Family Vault',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const ChildHomeShell(),
+      home: const RoleSelectionScreen(),
     );
   }
 }

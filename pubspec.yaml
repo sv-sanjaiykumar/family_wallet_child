@@ -38,6 +38,12 @@ dependencies:
   # Google Fonts for Nunito – used across the entire child module
   google_fonts: ^6.2.1
 
+  # Password hashing (SHA-256)
+  crypto: ^3.0.3
+
+  # Persisting session & credentials locally
+  shared_preferences: ^2.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

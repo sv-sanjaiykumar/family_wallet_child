@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // ── Brand Colors ──────────────────────────────────────────────
+  // ── Child Brand Colors ────────────────────────────────────────
   static const Color primary = Color(0xFF6C63FF);       // Purple
   static const Color primaryDark = Color(0xFF4B44CC);
   static const Color secondary = Color(0xFF00C9A7);     // Teal / Green
@@ -15,7 +15,19 @@ class AppTheme {
   static const Color textDark = Color(0xFF1E1B4B);
   static const Color textMuted = Color(0xFF9E9DB5);
 
-  // ── Gradients ─────────────────────────────────────────────────
+  // ── Parent Brand Colors (Fintech Blue) ────────────────────────
+  static const Color parentPrimary   = Color(0xFF1A73E8); // Google Blue
+  static const Color parentDark      = Color(0xFF0D47A1); // Deep Navy
+  static const Color parentAccent    = Color(0xFF00BCD4); // Cyan accent
+  static const Color parentSuccess   = Color(0xFF00C853); // Green confirm
+  static const Color parentWarning   = Color(0xFFFFA726); // Amber alert
+  static const Color parentDanger    = Color(0xFFEF5350); // Red alert
+  static const Color parentSurface   = Color(0xFFF0F4FF); // Light blue-grey bg
+  static const Color parentCardBg    = Color(0xFFFFFFFF);
+  static const Color parentTextDark  = Color(0xFF0D1B3E); // Deep ink
+  static const Color parentTextMuted = Color(0xFF7A8AA0); // Steel grey
+
+  // ── Child Gradients ───────────────────────────────────────────
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF6C63FF), Color(0xFF48CFE8)],
     begin: Alignment.topLeft,
@@ -52,7 +64,7 @@ class AppTheme {
     end: Alignment.bottomRight,
   );
 
-  // ── Goal Card Gradients ───────────────────────────────────────
+  // ── Child Goal Card Gradients ─────────────────────────────────
   static List<LinearGradient> goalGradients = [
     greenGradient,
     amberGradient,
@@ -63,6 +75,52 @@ class AppTheme {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+  ];
+
+  // ── Parent Gradients (Fintech Blue) ───────────────────────────
+
+  /// Main header gradient for parent screens
+  static const LinearGradient parentGradient = LinearGradient(
+    colors: [Color(0xFF1A73E8), Color(0xFF0D47A1)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// Alternate card gradient (blue → cyan)
+  static const LinearGradient parentCardGradient = LinearGradient(
+    colors: [Color(0xFF1E88E5), Color(0xFF00BCD4)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// Green confirmation gradient (add money / approve)
+  static const LinearGradient parentGreenGradient = LinearGradient(
+    colors: [Color(0xFF00C853), Color(0xFF00BFA5)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// Amber/orange gradient (warnings / limits)
+  static const LinearGradient parentAmberGradient = LinearGradient(
+    colors: [Color(0xFFFFA726), Color(0xFFFF7043)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// Indigo-violet gradient (secondary stat cards)
+  static const LinearGradient parentIndigoGradient = LinearGradient(
+    colors: [Color(0xFF5C6BC0), Color(0xFF8E24AA)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// Summary card gradients list (rotate by index)
+  static const List<LinearGradient> parentSummaryGradients = [
+    parentGradient,
+    parentGreenGradient,
+    parentCardGradient,
+    parentIndigoGradient,
+    parentAmberGradient,
   ];
 
   // ── Border Radius ─────────────────────────────────────────────
@@ -85,6 +143,22 @@ class AppTheme {
       color: Colors.black.withOpacity(0.08),
       blurRadius: 16,
       offset: const Offset(0, 4),
+    ),
+  ];
+
+  static List<BoxShadow> parentCardShadow = [
+    BoxShadow(
+      color: parentPrimary.withOpacity(0.15),
+      blurRadius: 20,
+      offset: const Offset(0, 6),
+    ),
+  ];
+
+  static List<BoxShadow> parentSoftShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.06),
+      blurRadius: 12,
+      offset: const Offset(0, 3),
     ),
   ];
 
